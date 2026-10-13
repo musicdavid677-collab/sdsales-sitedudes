@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SiteDudes CRM — Requirements & UI Design</title>
+<style>
+:root{--orange:#f59a19;--dark:#30363d;--bg:#f3f4f6;--text:#202936;--muted:#667085;--border:#e1e5eb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--dark);color:white;padding:17px max(22px,calc((100vw - 1160px)/2));display:flex;justify-content:space-between;align-items:center}
+.brand{font:bold italic 30px Georgia,serif;color:var(--orange)}.brand span{color:white}main{max-width:1160px;margin:32px auto;padding:0 22px 70px}
+h1{font-size:32px;line-height:1.2}h2{font-size:24px;margin:45px 0 15px;border-bottom:1px solid var(--border);padding-bottom:12px}h3{font-size:18px;margin:26px 0 12px}
+p{margin:10px 0 16px} .lead{font-size:17px;color:#465263}.card{background:white;border:1px solid var(--border);border-radius:12px;padding:24px;margin:18px 0;box-shadow:0 2px 8px #10182809}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+label{font-size:13px;font-weight:600;display:block;margin-bottom:5px}input,select,textarea{width:100%;border:1px solid #cbd2dc;border-radius:6px;padding:10px 12px;font:inherit;background:#fff;color:var(--text)}textarea{min-height:75px}
+button{background:var(--orange);border:0;color:white;padding:10px 15px;border-radius:6px;cursor:pointer;font-weight:650}button.secondary{background:white;color:#374151;border:1px solid #cbd2dc}button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:space-between;margin-top:16px}.muted,.caption{color:var(--muted);font-size:13px}.caption{margin-top:10px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 12px;border-bottom:1px solid var(--border);text-align:left}th{background:#f8fafc;color:#475467} .tablewrap{overflow-x:auto}
+.badge{display:inline-block;padding:3px 9px;border-radius:15px;background:#fff2db;color:#995600;font-size:12px;font-weight:650}.success{background:#e8f8ef;color:#187047}.info{background:#e9f2ff;color:#225da3}
+.metric{padding:15px;border:1px solid var(--border);border-radius:9px;background:#fafbfc}.metric strong{font-size:25px;display:block;line-height:1.5}
+.sidebar-preview{display:grid;grid-template-columns:230px 1fr;border:1px solid var(--border);border-radius:10px;overflow:hidden}.sidebar{background:#f5f6f8;padding:16px}.sidebar div{padding:7px 10px;font-size:13px}.sidebar .active{background:#fff0da;border-left:3px solid var(--orange);font-weight:700}.preview-main{padding:20px}
+.step{border:1px solid var(--border);border-radius:8px;padding:14px 18px;background:white}.arrow{text-align:center;color:#98a2b3;font-size:23px;line-height:1.2}.step strong{display:block}
+.pills{display:flex;gap:8px;margin:12px 0}.pill{flex:1;background:#e8ebef;height:6px;border-radius:6px}.pill.active{background:var(--orange)}
+pre{white-space:pre-wrap;word-break:break-word;background:#202936;color:#e7f0fa;padding:18px;border-radius:8px;font-size:13px;overflow:auto}
+.note{border-left:4px solid var(--orange);background:#fff9ef;padding:13px 16px;margin:18px 0}.hidden{display:none!important}
+ul,ol{padding-left:25px}li{margin:5px 0}.checkline{display:flex;align-items:flex-start;gap:8px}.checkline input{width:auto;margin-top:6px}
+footer{padding:25px;text-align:center;color:#667085;font-size:12px}
+@media(max-width:700px){.grid,.grid4{grid-template-columns:1fr}.sidebar-preview{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(2,1fr)}main{padding:0 14px}h1{font-size:27px}.card{padding:16px}}
+@media print{header{print-color-adjust:exact}button{display:none}body{background:white}.card{break-inside:avoid}main{margin:0}}
+</style>
+</head>
+<body>
+<header><div class="brand">Site<span>Dudes</span></div><div>CRM Requirements & UI Design</div></header>
+<main>
+<h1>SiteDudes CRM — Requirements Analysis and UI Design</h1>
+<p class="lead">A complete plan for upgrading the existing Laravel CRM into a remote sales management system, based on the client's written requirements and supplied screenshots.</p>
+<p>The new CRM (<code>sdsales.sitedudes.com</code>) currently provides Profile, Dashboard, Leads, Tasks, Users and Roles. The old sales system (<code>sales.sitedudes.com</code>) shows sales tiers, pricing, commissions, projects, leads and supporting tools. The new solution must consolidate the required features.</p>
+<h2>1. Overall CRM architecture</h2>
+<div class="tablewrap"><table><tr><th>User type</th><th>Responsibilities</th></tr><tr><td>Visitor / Applicant</td><td>Register, upload ID, sign agreement, verify email and wait for approval.</td></tr><tr><td>Remote Sales Representative</td><td>Manage prospects, leads, customers and sales; monitor commissions.</td></tr><tr><td>Administrator</td><td>Review registrations, manage access, monitor transactions and approve payouts.</td></tr></table></div>
+<p>Sales Agent, Ambassador, Guru and Collaborator are best represented as <strong>sales tiers</strong>, not four separate permission roles.</p>
+<h3>Proposed navigation UI</h3>
+<div class="sidebar-preview"><div class="sidebar"><div>Dashboard</div><div class="active">Prospects</div><div>Leads</div><div>Customers</div><div>Sales</div><div>Commissions</div><div>Promo Codes</div><div>Profile</div><hr><div>Admin Approvals</div><div>Users & Roles</div><div>Payments</div><div>Imports</div><div>Settings</div></div><div class="preview-main"><h3>Sales Dashboard</h3><div class="grid"><div class="metric"><strong>128</strong><span class="muted">Prospects</span></div><div class="metric"><strong>42</strong><span class="muted">Active Leads</span></div><div class="metric"><strong>14</strong><span class="muted">Sales / 12 months</span></div><div class="metric"><strong>$2,450</strong><span class="muted">Unpaid Commission</span></div></div><h3>Recent activity</h3><p>New prospect imported</p><hr><p>Sale pending commission payment</p><hr><p>Customer registration completed</p></div></div><p class="caption">Dashboard data is illustrative.</p>
+<h2>2. Registration requirements</h2>
+<p>Carry over the existing profile fields: first name, last name, email, date of birth, gender, job title, phone and address. Add front and back photo ID uploads, terms and conditions consent and an electronic signature. Add secure password setup or invitation-based password creation.</p>
+<h3>Interactive registration UI</h3>
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0">Remote Sales Registration</h3><span class="badge">Demo</span></div>
+<div class="pills"><div class="pill active" id="pill0"></div><div class="pill" id="pill1"></div><div class="pill" id="pill2"></div></div>
+<p class="muted" id="stepName">Step 1 of 3 — Personal information</p>
+<div id="reg0"><div class="grid"><div><label>First Name *</label><input placeholder="First name"></div><div><label>Last Name *</label><input placeholder="Last name"></div><div><label>Email *</label><input type="email" placeholder="name@example.com"></div><div><label>Date of Birth</label><input type="date"></div><div><label>Gender</label><select><option>Select gender</option><option>Male</option><option>Female</option><option>Other</option><option>Prefer not to say</option></select></div><div><label>Job Title</label><input placeholder="Sales Representative"></div><div><label>Phone *</label><input type="tel" placeholder="Phone number"></div><div><label>Address *</label><input placeholder="Full address"></div><div><label>Password *</label><input type="password" placeholder="Password"></div><div><label>Confirm Password *</label><input type="password" placeholder="Confirm password"></div></div></div>
+<div id="reg1" class="hidden"><p>Upload clear images of both sides of a government-issued photo ID. The files must be stored privately and reviewed only by authorized administrators.</p><label>Photo ID — Front *</label><input type="file" accept="image/png,image/jpeg,application/pdf"><br><br><label>Photo ID — Back *</label><input type="file" accept="image/png,image/jpeg,application/pdf"></div>
+<div id="reg2" class="hidden"><div class="note"><strong>Sales Representative Agreement</strong><p>The full legal terms, commission policies, confidentiality provisions and privacy notice must be provided and approved by the client.</p></div><label class="checkline"><input id="terms" type="checkbox"> I have read and agree to the Terms and Conditions.</label><br><label>Electronic Signature *</label><canvas id="signature" width="650" height="150" style="border:1px solid #cbd2dc;border-radius:6px;width:100%;height:150px;touch-action:none"></canvas><div class="actions"><button class="secondary" type="button" onclick="clearSignature()">Clear signature</button></div><p class="caption">This signature pad is a local demo. A production implementation must record consent, timestamp and agreement version.</p></div>
+<div class="actions"><button id="back" class="secondary" onclick="moveStep(-1)" disabled>Back</button><button id="next" onclick="moveStep(1)">Continue →</button></div><p class="caption" id="regMessage">This demonstration does not submit or store registration data.</p>
+</div>
+<h3>Registration and approval workflow</h3>
+<div class="card" id="regFlow"></div>
+<p><strong>Security:</strong> After approval, email a one-time password-setup link rather than plaintext credentials. Email verification and administrator approval must both be complete before sales dashboard access is granted. Protect identity files with private storage, strict authorization and a retention policy.</p>
+<pre>// Suggested users fields
+role_id
+approval_status  // pending, approved, rejected
+approved_at
+approved_by
+email_verified_at
+is_active
+
+// Suggested sales_representative_profiles fields
+user_id
+date_of_birth
+gender
+job_title
+phone
+address
+photo_id_front_path
+photo_id_back_path
+signature_path
+terms_accepted_at
+terms_version</pre>
+<h2>3. Administrator registration approval page</h2>
+<p>Administrators must review applicants' profile data, ID images, signed agreement and email status; then approve or reject the application. Save decision history and rejection reasons.</p>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Registration Approvals</h3><span class="badge" id="pendingCount">3 Pending</span></div><div class="tablewrap"><table><thead><tr><th>Applicant</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody id="approvalRows"></tbody></table></div><p class="caption">Demo applicants; approval buttons update this preview only.</p></div>
+<h2>4. Prospects and Leads management</h2>
+<p>Preserve the existing Leads module and create a separate Prospects module. Proposed distinction: a Prospect is an early-stage potential client, while a Lead is actively being pursued. Confirm the precise distinction with the client.</p>
+<div class="tablewrap"><table><tr><th>Prospects</th><th>Leads</th></tr><tr><td>Early-stage potential customers</td><td>Active sales opportunities</td></tr><tr><td>Manual entry and CSV import</td><td>Manual entry or conversion from prospects</td></tr><tr><td>Basic company and contact information</td><td>Status, follow-up, proposal and sales details</td></tr><tr><td>Assigned to an individual rep</td><td>Assigned to a rep with sales pipeline tracking</td></tr></table></div>
+<h3>Interactive Prospects UI</h3>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h3>Prospects</h3><div><button onclick="showNewProspect()">+ New Prospect</button> <button class="secondary" onclick="document.getElementById('csvUpload').click()">Import CSV</button><input type="file" id="csvUpload" accept=".csv,text/csv" hidden></div></div><div id="newProspect" class="hidden"><div class="grid"><div><label>Name</label><input id="pname"></div><div><label>Company</label><input id="pcompany"></div><div><label>Email</label><input id="pemail" type="email"></div><div><label>Phone</label><input id="pphone"></div></div><div class="actions"><button onclick="addProspect()">Save Demo Prospect</button></div></div><p id="csvStatus" class="muted"></p><input id="prospectSearch" placeholder="Search prospects..." oninput="renderProspects()"><div class="tablewrap"><table><thead><tr><th>Name</th><th>Company</th><th>Source</th><th>Status</th></tr></thead><tbody id="prospectRows"></tbody></table></div><p class="caption">Local demonstration only. CSV imports are previewed locally; they are not sent to a server.</p></div>
+<p>CSV import should support column mapping, validation, duplicate detection, per-representative assignment, import previews, error reports and import history. The client's referenced sample CSV is not available in this conversation, so its exact columns still need to be confirmed.</p>
+<pre>prospects
+---------
+id
+assigned_user_id
+first_name
+last_name
+company
+email
+phone
+website
+address
+industry
+source
+status
+notes
+import_batch_id
+converted_to_lead_id
+created_at
+updated_at</pre>
+<h2>5. Sales tiers and commissions</h2>
+<div class="tablewrap"><table><thead><tr><th>Tier</th><th>Sales in rolling 12 months</th><th>Setup commission</th><th>Monthly residual</th></tr></thead><tbody><tr><td>Sales Agent</td><td>0–10</td><td>40%</td><td>0%</td></tr><tr><td>Sales Ambassador</td><td>11–30</td><td>48%</td><td>0%</td></tr><tr><td>Sales Guru</td><td>31–50</td><td>54%</td><td>0%</td></tr><tr><td>Collaborator</td><td>51+</td><td>60%</td><td>0%</td></tr></tbody></table></div>
+<h3>Interactive commission calculator</h3>
+<div class="card"><label>Qualifying sales in the last 12 months: <strong id="salesNum">14</strong></label><input id="salesSlider" type="range" min="0" max="75" value="14" oninput="calcCommission()"><br><br><label>Setup fee (example USD)</label><input id="setupFee" type="number" min="0" value="1000" oninput="calcCommission()"><div class="grid" style="margin-top:16px"><div class="metric"><span class="muted">Current Tier</span><strong id="tierName">Sales Ambassador</strong><span id="tierRate">48%</span></div><div class="metric"><span class="muted">Commission per Sale</span><strong id="commission">$480.00</strong><span class="muted">0% monthly residual</span></div></div><p class="caption">Illustrative calculations, before any adjustments. Confirm how qualifying sales and effective tier rates are defined.</p></div>
+<p>Persist each sale's commission rate and amount at the appropriate calculation/finalization point. Do not retroactively recalculate historical commissions when the representative's tier changes unless the client explicitly requires it.</p>
+<h2>6. Converting a Lead to a Customer</h2>
+<div class="card" id="conversionFlow"></div>
+<h3>Lead details and checkout preview</h3>
+<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Lead Details</h3><span class="badge info">Qualified</span></div><div class="grid"><div><span class="muted">Contact</span><br><strong>Michael Roberts</strong></div><div><span class="muted">Company</span><br><strong>Roberts Plumbing</strong></div><div><span class="muted">Assigned Rep</span><br>Sales Agent</div><div><span class="muted">Source</span><br>ZoomInfo</div></div><hr><h3>Order Summary</h3><p>Website setup fee <strong style="float:right">$1,000.00</strong></p><p>Monthly subscription <strong style="float:right">$99.00</strong></p><p>Example setup commission (40%) <strong style="float:right">$400.00</strong></p><button style="width:100%" onclick="alert('Demo only: production checkout must use Moneris hosted payment/tokenization and server-side verification.')">Convert to Customer & Pay (Preview)</button><p class="caption">No card details are collected and no payment is processed here.</p></div>
+<p>After a verified Moneris payment, create or link the customer in the SiteDudes intranet, send the welcome email to the customer and notifications to service@sitedudes.com and websites@sitedudes.com, then record the sale with a <strong>To Be Paid</strong> commission.</p>
+<div class="note"><strong>Payment safety:</strong> Never store raw card numbers or CVVs. Use Moneris hosted checkout or tokenization. Verify results server-side, implement idempotency, queue integration jobs and reconcile partial failures so retries cannot charge customers twice.</div>
+<h2>7. Commission payment management</h2>
+<p>Sales representatives are paid on the <strong>21st of each month</strong> for outstanding eligible sales. Representatives need a commission history; administrators need payout review, batching, reconciliation and payment status management.</p>
+<div class="card"><h3>Commission Management</h3><div class="grid"><div class="metric"><span class="muted">To Be Paid</span><strong>$1,240</strong></div><div class="metric"><span class="muted">Paid This Month</span><strong>$850</strong></div></div><div class="tablewrap" style="margin-top:16px"><table><thead><tr><th>Sale</th><th>Commission</th><th>Status</th></tr></thead><tbody><tr><td>S-1001</td><td>$400</td><td><span class="badge">To Be Paid</span></td></tr><tr><td>S-1002</td><td>$480</td><td><span class="badge">To Be Paid</span></td></tr><tr><td>S-1003</td><td>$360</td><td><span class="badge success">Paid</span></td></tr></tbody></table></div><p class="muted">Next regular payout: 21st</p><p class="caption">Illustrative data only.</p></div>
+<p>Suggested statuses: <code>to_be_paid</code>, <code>approved</code>, <code>paid</code>, <code>cancelled</code>. Record payout date, payment reference, paid amount, administrator and adjustments for refunds or chargebacks.</p>
+<h2>8. Remaining client requirements</h2>
+<h3>Old CRM page and data migration</h3><p>Audit the old CRM's Sales and Admin pages, including Dashboard, Pricing, Commission, Projects, Tasks, Support, Leads and Knowledge Base. Identify which pages, records, workflows and permissions must be migrated into Laravel. Do not assume that screenshots capture every feature.</p>
+<h3>ZoomInfo lead imports</h3><p>Support ZoomInfo-sourced leads through a CSV import first or a direct integration if access and API permissions are available. Preserve source attribution, external IDs, ownership and duplicate handling.</p>
+<h3>Promo codes</h3><p>Provide an administrator interface to create, activate and expire promotional codes, and a sales representative interface to apply authorized codes. Support discount type, amount, eligibility, redemption limits and usage history. Confirm whether discounts affect the commissionable setup-fee base.</p>
+<h3>Phase 2 / 3: AI email content</h3><p>AI-generated sales email content is explicitly deferred. Keep it outside the initial delivery scope, while designing the messaging system so the feature can be added later.</p>
+<h2>9. Recommended Laravel implementation structure</h2>
+<div class="tablewrap"><table><thead><tr><th>Module</th><th>Laravel implementation</th></tr></thead><tbody><tr><td>Registration</td><td>Form Requests, User/Profile models, private file storage, signed agreement, verification notifications</td></tr><tr><td>Approval</td><td>Admin controller, authorization policies, approval audit records, queued emails</td></tr><tr><td>Prospects</td><td>Prospect model, CRUD, assignment policies, CSV import jobs and batch logs</td></tr><tr><td>Sales tiers</td><td>Tier configuration, rolling 12-month qualified sales query, commission snapshots</td></tr><tr><td>Moneris</td><td>Payment service, hosted checkout/tokenization, server verification, webhook handling if supported</td></tr><tr><td>Customer conversion</td><td>Conversion service, idempotent integration jobs, intranet API adapter</td></tr><tr><td>Commissions</td><td>Commission and Payout models, payout batches, approval audit trail</td></tr><tr><td>Promo codes</td><td>PromoCode model, redemption records and validation service</td></tr><tr><td>Notifications</td><td>Laravel Mail, Notifications and Queues with retry and failure logging</td></tr></tbody></table></div>
+<h2>10. Questions to confirm with the client</h2>
+<ol><li>What exactly distinguishes a Prospect from a Lead, and when does conversion occur?</li><li>Which specific old CRM pages, records and permissions must be carried over?</li><li>What is the precise CSV format and how should duplicate ZoomInfo records be handled?</li><li>Does a sale count toward the tier at payment approval, customer conversion or another event?</li><li>Does the new commission tier apply immediately to the qualifying sale or only subsequent sales?</li><li>What is the exact SiteDudes Intranet API/interface for customer creation?</li><li>Which Moneris integration method and merchant environment are available?</li><li>Are commissions based on setup fees before or after discounts, taxes and refunds?</li><li>What is the cutoff date for payouts on the 21st, and how are refunds/chargebacks handled?</li><li>What are the promo code rules, privacy requirements for photo IDs and approved terms document?</li></ol>
+<div class="note"><strong>Scope recommendation:</strong> First build registration/approval, prospect and lead management, and old CRM feature migration. Then implement Moneris conversion and commission payout workflows. Leave AI email generation for a later phase as requested.</div>
+</main><footer>SiteDudes CRM — Local HTML requirements and interactive UI preview. Demo data only. No backend connection.</footer>
+<script>
+let step=0, signed=false;
+function moveStep(delta){if(step===2&&delta>0){if(!document.getElementById('terms').checked||!signed){document.getElementById('regMessage').textContent='Please accept the terms and draw a signature.';return}document.getElementById('regMessage').textContent='Preview complete. A Laravel backend is required to submit registration.';return}step=Math.min(2,Math.max(0,step+delta));for(let i=0;i<3;i++){document.getElementById('reg'+i).classList.toggle('hidden',i!==step);document.getElementById('pill'+i).classList.toggle('active',i===step)}document.getElementById('back').disabled=step===0;document.getElementById('next').textContent=step===2?'Finish Preview':'Continue →';document.getElementById('stepName').textContent='Step '+(step+1)+' of 3 — '+['Personal information','Identity verification','Terms and signature'][step]}
+const canvas=document.getElementById('signature'),ctx=canvas.getContext('2d');let drawing=false;
+function coords(e){let r=canvas.getBoundingClientRect();return [(e.clientX-r.left)*canvas.width/r.width,(e.clientY-r.top)*canvas.height/r.height]}
+canvas.addEventListener('pointerdown',e=>{drawing=true;canvas.setPointerCapture(e.pointerId);let p=coords(e);ctx.beginPath();ctx.moveTo(...p);ctx.lineWidth=2;ctx.lineCap='round';ctx.strokeStyle='#253247'});
+canvas.addEventListener('pointermove',e=>{if(!drawing)return;ctx.lineTo(...coords(e));ctx.stroke();signed=true});
+canvas.addEventListener('pointerup',()=>drawing=false);
+function clearSignature(){ctx.clearRect(0,0,canvas.width,canvas.height);signed=false}
+function makeFlow(id,steps){let el=document.getElementById(id);steps.forEach((s,i)=>{let d=document.createElement('div');d.className='step';let t=document.createElement('strong');t.textContent=(i+1)+'. '+s[0];let p=document.createElement('span');p.className='muted';p.textContent=s[1];d.append(t,p);el.append(d);if(i<steps.length-1){let a=document.createElement('div');a.className='arrow';a.textContent='↓';el.append(a)}})}
+makeFlow('regFlow',[['Applicant submits registration','Profile, ID images, signed agreement'],['Account is Pending','Remote Sales role assigned; access restricted'],['Admin receives notification','Email to chad@sitedudes.com'],['Administrator reviews application','Approve or reject with audit record'],['Applicant verifies email and sets password','Secure expiring links'],['Sales dashboard access enabled','Both approval and email verification required']]);
+makeFlow('conversionFlow',[['Sales rep selects Lead','Review customer and order'],['Moneris payment','Hosted/tokenized card payment'],['Verify payment result','Server-side confirmation'],['Create customer in Intranet','Idempotent create or link'],['Send welcome notifications','Customer and internal teams'],['Record sale in CRM','Save commission snapshot'],['Mark commission To Be Paid','Available to admin and rep'],['Admin pays commission','Monthly cycle on the 21st']]);
+let approvals=[['John Smith','Pending'],['Maria Lopez','Pending'],['David Wilson','Pending']];
+function renderApprovals(){let body=document.getElementById('approvalRows');body.replaceChildren();approvals.forEach((a,i)=>{let tr=document.createElement('tr');[a[0],'Remote Sales',a[1]].forEach(v=>{let td=document.createElement('td');td.textContent=v;tr.append(td)});let td=document.createElement('td');if(a[1]==='Pending'){for(const [label,status] of [['Approve','Approved'],['Reject','Rejected']]){let b=document.createElement('button');b.textContent=label;b.className=label==='Reject'?'secondary':'';b.style.marginRight='5px';b.onclick=()=>{approvals[i][1]=status;renderApprovals()};td.append(b)}}tr.append(td);body.append(tr)});document.getElementById('pendingCount').textContent=approvals.filter(a=>a[1]==='Pending').length+' Pending'}renderApprovals();
+let prospects=[{name:'Olivia Martin',company:'Green Leaf Co.',source:'CSV Import',status:'New'},{name:'James Wilson',company:'Wilson Plumbing',source:'Manual',status:'Contacted'},{name:'Sarah Brown',company:'Brown Design',source:'ZoomInfo',status:'New'}];
+function renderProspects(){let q=document.getElementById('prospectSearch').value.toLowerCase(),body=document.getElementById('prospectRows');body.replaceChildren();prospects.filter(p=>(p.name+' '+p.company).toLowerCase().includes(q)).forEach(p=>{let tr=document.createElement('tr');[p.name,p.company,p.source,p.status].forEach(v=>{let td=document.createElement('td');td.textContent=v;tr.append(td)});body.append(tr)})}renderProspects();
+function showNewProspect(){document.getElementById('newProspect').classList.toggle('hidden')}
+function addProspect(){let name=document.getElementById('pname').value.trim(),company=document.getElementById('pcompany').value.trim();if(!name){alert('Please enter a name.');return}prospects.unshift({name,company,source:'Manual',status:'New'});document.getElementById('newProspect').classList.add('hidden');renderProspects()}
+document.getElementById('csvUpload').addEventListener('change',async e=>{let f=e.target.files[0];if(!f)return;let s=await f.text();document.getElementById('csvStatus').textContent='Local preview: '+f.name+' ('+Math.max(0,s.trim().split(/\r?\n/).length-1)+' estimated data rows). No data uploaded. Production CSV mapping/validation is still required.'});
+function calcCommission(){let n=+document.getElementById('salesSlider').value,fee=Math.max(0,+document.getElementById('setupFee').value||0);let t=n<=10?['Sales Agent',40]:n<=30?['Sales Ambassador',48]:n<=50?['Sales Guru',54]:['Collaborator',60];document.getElementById('salesNum').textContent=n;document.getElementById('tierName').textContent=t[0];document.getElementById('tierRate').textContent=t[1]+'%';document.getElementById('commission').textContent=(fee*t[1]/100).toLocaleString('en-US',{style:'currency',currency:'USD'})}calcCommission();
+</script></body></html>

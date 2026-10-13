@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+@layer components{
+.orangebtn{
+@apply inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 transition ease-in-out duration-150
+}
+}
+.float-md-right{display:flex}
+.orangebtn{margin-left:10px; margin-bottom:10px}
+input, select, textarea{border-color:#cccccc!important}
+hr{margin-bottom:10px!important}
+#taskForm .form-group{margin-bottom:12px}
+#userForm .col-span-6{margin-bottom:12px}
+table.mt-5 tr:nth-child(even) { background-color: #efefef;}
+h5{font-weight:600}
+#main-content form input[type=text]{background-color: #efefef}
+.alert-success{
+    background: #ddffdd!important;
+    padding: 5px;
+    font-size: 14px;
+    color: #333333;
+}
+.alert-danger{
+    padding: 5px;
+    font-size: 14px;
+    color: #D8000C;
+	background-color: #FFBABA!important;
+}
+.hx-product-sold span{background-color: #1f2937;
+    display: inline-block;
+    padding: 2px 10px;
+    margin: 0 5px 5px 0;
+    color: #ffffff; border-radius: 5px;}
+
+    .copybtn{background-image: url(/images/copy.png);
+    height: 15px;
+    width: 15px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+input[type=text], input[type=email], input[type=number], input[type=tel],select,textarea {
+    background: #efefef;
+    border: none;
+    padding: 10px;
+    margin: 5px 0;
+}
+.form-check-inline{display: inline-block;}
+select {
+  -webkit-appearance: none; /* For WebKit browsers (Chrome, Safari) */
+  -moz-appearance: none;    /* For Mozilla browsers (Firefox) */
+  appearance: none;         /* Standard property */
+
+  /* ... (hide default arrow as above) ... */
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>')!important; /* SVG arrow */
+  background-repeat: no-repeat!important;
+  background-position: right 10px center!important;
+  padding-right: 30px!important; /* Adjust padding to make space for the arrow */
+}
