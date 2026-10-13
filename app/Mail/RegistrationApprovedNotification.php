@@ -28,13 +28,13 @@ class RegistrationApprovedNotification extends Mailable
     public function content(): Content
     {
         $verificationUrl = URL::temporarySignedRoute(
-            'verification.verify',
+            'registration.verify',
             now()->addHours(24),
-            ['id' => $this->user->id, 'hash' => sha1($this->user->email)]
+            ['user' => $this->user->id]
         );
 
         $passwordSetupUrl = URL::temporarySignedRoute(
-            'password.setup',
+            'registration.password',
             now()->addHours(48),
             ['user' => $this->user->id]
         );

@@ -16,6 +16,7 @@ use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RemoteSalesRegistrationController;
 use App\Http\Controllers\AdminRegistrationController;
+use App\Http\Controllers\RegistrationSetupController;
 use App\Http\Middleware\SetUserPermission;
 
 Route::get('/', function () {
@@ -33,6 +34,13 @@ Route::get('/approval-pending', function () {
     return view('auth.approval-pending');
 })->name('approval-pending');
 
+// Signed email links sent after approval
+Route::middleware('signed')->group(function () {
+    Route::get('/registration/verify/{user}', [RegistrationSetupController::class, 'verifyEmail'])->name('registration.verify');
+    Route::get('/registration/password/{user}', [RegistrationSetupController::class, 'showPasswordForm'])->name('registration.password');
+    Route::post('/registration/password/{user}', [RegistrationSetupController::class, 'storePassword'])->name('registration.password.store');
+});
+
 Route::get('/user/status', function () {
     return response()->json([
         'isLoggedIn' => Auth::check(),
@@ -46,6 +54,7 @@ Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
+    'registration.approved',
 //    'set_user_permission'
 ])->group(function () {
     Route::get('/dashboard', function () {
@@ -53,7 +62,7 @@ Route::middleware([
     })->name('dashboard');
 
     // Admin Registration Approvals
-    Route::prefix('admin/registrations')->group(function () {
+    Route::prefix('admin/registrations')->middleware('administrator')->group(function () {
         Route::get('/', [AdminRegistrationController::class, 'index'])->name('admin.registrations.index');
         Route::get('/{user}', [AdminRegistrationController::class, 'show'])->name('admin.registrations.show');
         Route::post('/{user}/approve', [AdminRegistrationController::class, 'approve'])->name('admin.registrations.approve');

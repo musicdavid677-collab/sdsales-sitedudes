@@ -84,6 +84,11 @@ class User extends Authenticatable
         return $this->hasOne(SalesRepresentativeProfile::class);
     }
 
+    public function registrationApproval()
+    {
+        return $this->hasOne(RegistrationApproval::class);
+    }
+
     public function approver()
     {
         return $this->belongsTo(User::class, 'approved_by');

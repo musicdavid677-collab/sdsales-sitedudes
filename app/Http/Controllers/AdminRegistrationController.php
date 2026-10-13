@@ -12,12 +12,6 @@ use Illuminate\Support\Facades\Storage;
 
 class AdminRegistrationController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-        $this->middleware('admin');
-    }
-
     public function index(Request $request)
     {
         $status = $request->get('status', 'pending');
@@ -46,21 +40,13 @@ class AdminRegistrationController extends Controller
 
     public function show(User $user)
     {
-        $this->authorize('viewAny', RegistrationApproval::class);
-
         $user->load(['registrationApproval', 'profile']);
 
-        $photoIdFront = $user->profile?->photo_id_front_path ?
-            Storage::disk('private')->url($user->profile->photo_id_front_path) : null;
-        $photoIdBack = $user->profile?->photo_id_back_path ?
-            Storage::disk('private')->url($user->profile->photo_id_back_path) : null;
-
-        return view('admin.registrations.show', compact('user', 'photoIdFront', 'photoIdBack'));
+        return view('admin.registrations.show', compact('user'));
     }
 
     public function approve(Request $request, User $user)
     {
-        $this->authorize('update', RegistrationApproval::class);
 
         $approval = $user->registrationApproval;
         if (!$approval || $approval->status !== 'pending') {
@@ -79,14 +65,13 @@ class AdminRegistrationController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
-        Mail::send(new RegistrationApprovedNotification($user));
+        Mail::to($user->email)->send(new RegistrationApprovedNotification($user));
 
         return back()->with('success', 'Registration approved. Verification email sent to ' . $user->email);
     }
 
     public function reject(Request $request, User $user)
     {
-        $this->authorize('update', RegistrationApproval::class);
 
         $request->validate([
             'reason' => 'required|string|max:1000',
@@ -110,14 +95,13 @@ class AdminRegistrationController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
-        Mail::send(new RegistrationRejectedNotification($user, $request->reason));
+        Mail::to($user->email)->send(new RegistrationRejectedNotification($user, $request->reason));
 
         return back()->with('success', 'Registration rejected. Notification sent to ' . $user->email);
     }
 
     public function viewPhotoId(User $user, string $side)
     {
-        $this->authorize('view', RegistrationApproval::class);
 
         if ($side === 'front') {
             $path = $user->profile?->photo_id_front_path;
@@ -134,7 +118,6 @@ class AdminRegistrationController extends Controller
 
     public function downloadDocuments(User $user)
     {
-        $this->authorize('view', RegistrationApproval::class);
 
         $zip = new \ZipArchive();
         $zipPath = storage_path('app/temp/' . uniqid() . '.zip');

@@ -1,30 +1,26 @@
 @component('mail::message')
-# Registration Approved! 🎉
+# Registration Approved
 
-Congratulations {{ $user->first_name }}!
+Congratulations {{ $user->first_name }}, your Remote Sales Representative registration has been approved.
 
-Your Remote Sales Representative registration has been approved by our team. You're almost ready to start!
+To finish setting up your account, please complete both steps below:
 
-**Next Steps:**
-
-1. **Verify Your Email:** Click the button below to verify your email address
-2. **Set Your Password:** After email verification, you'll receive a secure link to set your password
-3. **Access the Dashboard:** Once verified, you can log in and start managing your sales
+1. **Verify your email address**
+2. **Set your password**
 
 @component('mail::button', ['url' => $verificationUrl])
 Verify Email Address
 @endcomponent
 
-**Verify Email Link (expires in 24 hours):**
-{{ $verificationUrl }}
+@component('mail::button', ['url' => $passwordSetupUrl])
+Set Your Password
+@endcomponent
 
-**Important Security Notes:**
-- This verification link expires in 24 hours
-- Do not share this link with anyone
-- Email verification is required before you can access the CRM
-- Your password setup link will be sent after verification
-
-If you did not register, please contact support immediately.
+**Security notes:**
+- The verification link expires in 24 hours.
+- The password setup link expires in 48 hours and can only be used once.
+- Never share these links with anyone.
+- If you did not register with SiteDudes, please ignore this email.
 
 Thanks,<br>
 {{ config('app.name') }} Team

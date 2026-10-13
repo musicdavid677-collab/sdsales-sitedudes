@@ -10,37 +10,34 @@ class CheckRegistrationApproval
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()) {
-            // Check if user is an administrator - bypass restriction
-            if ($request->user()->is_administrator) {
-                return $next($request);
-            }
+        $user = $request->user();
 
-            // Check approval status
-            if ($request->user()->approval_status !== 'approved') {
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        'message' => 'Your registration is pending administrator approval.'
-                    ], 403);
-                }
+        // Accounts created before the approval workflow have no registration record and are not gated.
+        if (!$user || $user->is_administrator || !$user->registrationApproval) {
+            return $next($request);
+        }
 
-                return redirect()->route('approval-pending')->with('error',
-                    'Your registration is pending administrator approval. You will receive an email once your application is reviewed.');
-            }
+        if ($user->approval_status !== 'approved') {
+            $message = $user->approval_status === 'rejected'
+                ? 'Your registration was not approved.'
+                : 'Your registration is pending administrator approval.';
 
-            // Check email verification
-            if (!$request->user()->email_verified_at) {
-                if ($request->expectsJson()) {
-                    return response()->json([
-                        'message' => 'Please verify your email address.'
-                    ], 403);
-                }
+            return $this->deny($request, $message);
+        }
 
-                return redirect()->route('verification.notice')->with('error',
-                    'Please verify your email address to continue.');
-            }
+        if (!$user->email_verified_at) {
+            return $this->deny($request, 'Please verify your email address to continue.');
         }
 
         return $next($request);
+    }
+
+    private function deny(Request $request, string $message): Response
+    {
+        if ($request->expectsJson()) {
+            return response()->json(['message' => $message], 403);
+        }
+
+        return redirect()->route('approval-pending')->with('error', $message);
     }
 }
