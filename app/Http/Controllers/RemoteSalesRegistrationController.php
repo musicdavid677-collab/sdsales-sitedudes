@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewRegistrationNotification;
+use App\Models\RegistrationApproval;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 
@@ -120,11 +123,23 @@ class RemoteSalesRegistrationController extends Controller
             ]);
         }
 
+        // Create registration approval record
+        RegistrationApproval::create([
+            'user_id' => $user->id,
+            'status' => 'pending',
+        ]);
+
+        // Send notification to administrators
+        $admins = User::where('is_administrator', true)->get();
+        foreach ($admins as $admin) {
+            Mail::to($admin->email)->send(new NewRegistrationNotification($user));
+        }
+
         $request->session()->forget('registration_data');
 
         return response()->json([
             'success' => true,
-            'message' => 'Registration submitted successfully. Please check your email to verify your account.'
+            'message' => 'Registration submitted successfully. An administrator will review your application. Please check your email for further instructions.'
         ]);
     }
 }

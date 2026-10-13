@@ -15,6 +15,7 @@ use App\Http\Controllers\EstimateController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RemoteSalesRegistrationController;
+use App\Http\Controllers\AdminRegistrationController;
 use App\Http\Middleware\SetUserPermission;
 
 Route::get('/', function () {
@@ -26,6 +27,11 @@ Route::get('/register/remote-sales', [RemoteSalesRegistrationController::class, 
 Route::post('/register/step1', [RemoteSalesRegistrationController::class, 'submitStep1'])->name('register.step1');
 Route::post('/register/step2', [RemoteSalesRegistrationController::class, 'submitStep2'])->name('register.step2');
 Route::post('/register/step3', [RemoteSalesRegistrationController::class, 'submitStep3'])->name('register.step3');
+
+// Approval Pending Page
+Route::get('/approval-pending', function () {
+    return view('auth.approval-pending');
+})->name('approval-pending');
 
 Route::get('/user/status', function () {
     return response()->json([
@@ -46,6 +52,15 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+    // Admin Registration Approvals
+    Route::prefix('admin/registrations')->group(function () {
+        Route::get('/', [AdminRegistrationController::class, 'index'])->name('admin.registrations.index');
+        Route::get('/{user}', [AdminRegistrationController::class, 'show'])->name('admin.registrations.show');
+        Route::post('/{user}/approve', [AdminRegistrationController::class, 'approve'])->name('admin.registrations.approve');
+        Route::post('/{user}/reject', [AdminRegistrationController::class, 'reject'])->name('admin.registrations.reject');
+        Route::get('/{user}/photo-id/{side}', [AdminRegistrationController::class, 'viewPhotoId'])->name('admin.registrations.view-photo-id');
+        Route::get('/{user}/documents/download', [AdminRegistrationController::class, 'downloadDocuments'])->name('admin.registrations.download-documents');
+    });
 
 Route::get('/settings/services',[SettingsController::class,'services'])->name('services');
 Route::get('/settings/service/{id}',[SettingsController::class,'service'])->name('service');
