@@ -7,6 +7,7 @@ use App\Mail\RegistrationRejectedNotification;
 use App\Models\RegistrationApproval;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -53,19 +54,21 @@ class AdminRegistrationController extends Controller
             return back()->withErrors('This registration cannot be approved.');
         }
 
-        $approval->update([
-            'status' => 'approved',
-            'approved_by' => auth()->id(),
-            'approved_at' => now(),
-        ]);
+        DB::transaction(function () use ($approval, $user) {
+            $approval->update([
+                'status' => 'approved',
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+            ]);
 
-        $user->update([
-            'approval_status' => 'approved',
-            'approved_at' => now(),
-            'approved_by' => auth()->id(),
-        ]);
+            $user->update([
+                'approval_status' => 'approved',
+                'approved_at' => now(),
+                'approved_by' => auth()->id(),
+            ]);
 
-        Mail::to($user->email)->send(new RegistrationApprovedNotification($user));
+            Mail::to($user->email)->send(new RegistrationApprovedNotification($user));
+        });
 
         return back()->with('success', 'Registration approved. Verification email sent to ' . $user->email);
     }
@@ -82,20 +85,22 @@ class AdminRegistrationController extends Controller
             return back()->withErrors('This registration cannot be rejected.');
         }
 
-        $approval->update([
-            'status' => 'rejected',
-            'approved_by' => auth()->id(),
-            'approved_at' => now(),
-            'rejection_reason' => $request->reason,
-        ]);
+        DB::transaction(function () use ($approval, $user, $request) {
+            $approval->update([
+                'status' => 'rejected',
+                'approved_by' => auth()->id(),
+                'approved_at' => now(),
+                'rejection_reason' => $request->reason,
+            ]);
 
-        $user->update([
-            'approval_status' => 'rejected',
-            'approved_at' => now(),
-            'approved_by' => auth()->id(),
-        ]);
+            $user->update([
+                'approval_status' => 'rejected',
+                'approved_at' => now(),
+                'approved_by' => auth()->id(),
+            ]);
 
-        Mail::to($user->email)->send(new RegistrationRejectedNotification($user, $request->reason));
+            Mail::to($user->email)->send(new RegistrationRejectedNotification($user, $request->reason));
+        });
 
         return back()->with('success', 'Registration rejected. Notification sent to ' . $user->email);
     }

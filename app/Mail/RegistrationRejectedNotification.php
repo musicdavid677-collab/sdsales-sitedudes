@@ -27,7 +27,7 @@ class RegistrationRejectedNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.registration-rejected',
+            markdown: 'emails.registration-rejected',
             with: [
                 'user' => $this->user,
                 'reason' => $this->reason,

@@ -27,7 +27,7 @@ class NewRegistrationNotification extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.new-registration-notification',
+            markdown: 'emails.new-registration-notification',
             with: [
                 'user' => $this->user,
                 'approvalUrl' => route('admin.registrations.index'),

@@ -39,6 +39,9 @@
                 <x-nav-link href="{{ route('role_list') }}" :active="request()->routeIs('role_list')">
                 Roles
                 </x-nav-link>
+                <x-nav-link href="{{ route('admin.registrations.index') }}" :active="request()->routeIs('admin.registrations.*')">
+                Registrations
+                </x-nav-link>
                 @endif
                 </div>
                 @endif

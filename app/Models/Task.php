@@ -157,7 +157,7 @@ class Task extends Model {
         //         1 => 'Custom',
         //     ] ;
 
-        $data['tag_id_list'] = Tag::orderBy('name','ASC')->pluck('name', 'id')->toArray();
+        $data['tag_id_list'] = Tag::orderBy('tag','ASC')->pluck('tag', 'id')->toArray();
 
 
 

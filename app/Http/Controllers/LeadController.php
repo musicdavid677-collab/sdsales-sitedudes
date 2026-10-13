@@ -1120,7 +1120,7 @@ die("Encryption failed: " . $e->getMessage());
                                 {
                                     foreach ($array_of_tags as $value) 
                                     {
-                                        $tag = Tag::firstOrCreate(['name' => $value ]);
+                                        $tag = Tag::firstOrCreate(['tag' => $value ]);
                                         $tags_array_list[] =  $tag->id;
                                     }
                                 }

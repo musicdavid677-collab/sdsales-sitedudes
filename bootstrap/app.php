@@ -16,10 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-         $middleware->alias(['set_user_permission'=>SetUserPermission::class]);
-         $middleware->alias(['administrator'=>EnsureAdministrator::class]);
-         $middleware->alias(['registration.approved'=>CheckRegistrationApproval::class]);
- $middleware->alias(['perm'=>CheckUserPermission::class]);
+         $middleware->alias([
+             'set_user_permission' => SetUserPermission::class,
+             'administrator' => EnsureAdministrator::class,
+             'registration.approved' => CheckRegistrationApproval::class,
+             'perm' => CheckUserPermission::class,
+         ]);
  //$middleware->appendToGroup('web',SetUserPermission::class);
 // $middleware->appendToGroup('web',CheckUserPermission::class);
     })

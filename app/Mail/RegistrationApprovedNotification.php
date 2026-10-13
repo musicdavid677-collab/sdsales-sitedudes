@@ -40,7 +40,7 @@ class RegistrationApprovedNotification extends Mailable
         );
 
         return new Content(
-            view: 'emails.registration-approved',
+            markdown: 'emails.registration-approved',
             with: [
                 'user' => $this->user,
                 'verificationUrl' => $verificationUrl,

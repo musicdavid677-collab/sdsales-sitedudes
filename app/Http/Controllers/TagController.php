@@ -30,11 +30,11 @@ class TagController extends Controller
         $number_of_records  = Tag::all()->count();
 
 
-        $query = Tag::orderBy('name', 'ASC');
+        $query = Tag::orderBy('tag', 'ASC');
 
         if($search_key)
         {
-            $query->where('name', 'like', like_search_wildcard_gen($search_key) );
+            $query->where('tag', 'like', like_search_wildcard_gen($search_key) );
         }
 
         $data = $query->get();
@@ -46,7 +46,7 @@ class TagController extends Controller
             foreach ($data as $key => $row)
             {
                 $rec[] = array(
-                    a_links('<a class="edit_item" data-id="'.$row->id.'" href="#">'.$row->name.'</a>' , []),                    
+                    a_links('<a class="edit_item" data-id="'.$row->id.'" href="#">'.$row->tag.'</a>' , []),                    
                     side_by_side_links($row->id, route('delete_tag', $row->id) )
 
                 );
@@ -90,7 +90,7 @@ class TagController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:tags',
+            'tag' => 'required|unique:tags',
         ]);
 
         if ($validator->fails()) 
@@ -100,7 +100,9 @@ class TagController extends Controller
 
         // Saving Data
         $obj        = new Tag();
-        $obj->name  = $request->name;
+        $obj        = new Tag();
+        $obj->tag  = $request->tag;
+        $obj->type = $request->type;
         $obj->save();
 
 
@@ -141,9 +143,9 @@ class TagController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id'                =>  'required',
-            'name' => [
+            'tag' => [
                 'required',
-                Rule::unique('taxes')->ignore($request->id),
+                Rule::unique('tags')->ignore($request->id),
             ],
         ]);
 
@@ -154,7 +156,8 @@ class TagController extends Controller
 
         // Saving Data
         $obj        = Tag::find(Input::get('id'));
-        $obj->name  = $request->name;
+        $obj->tag  = $request->tag;
+        $obj->type = $request->type;
         $obj->save();
 
 

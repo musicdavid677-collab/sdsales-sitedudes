@@ -9,7 +9,7 @@ class Tag extends Model {
 
     protected $dates = ['deleted_at'];
 
-    protected $fillable = ['name','type'];
+    protected $fillable = ['tag','type'];
 
 
 
