@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewRegistrationNotification;
 use App\Models\RegistrationApproval;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -104,6 +105,7 @@ class RemoteSalesRegistrationController extends Controller
             'birth_date' => $registrationData['date_of_birth'],
             'gender' => $registrationData['gender'],
             'job_title' => $registrationData['job_title'],
+            'role_id' => Role::where('name', 'Remote Sales')->value('id'),
             'approval_status' => 'pending',
             'is_active' => false,
         ]);
